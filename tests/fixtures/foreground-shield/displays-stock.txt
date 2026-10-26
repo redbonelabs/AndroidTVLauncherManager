@@ -1,0 +1,2 @@
+  mCurrentFocus=Window{abc123 u0 com.google.android.tvlauncher/com.google.android.tvlauncher.MainActivity}
+  mFocusedApp=ActivityRecord{abc123 u0 com.google.android.tvlauncher/.MainActivity t1}

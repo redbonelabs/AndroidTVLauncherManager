@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Android TV Launcher Manager</string>
+    <style name="AppTheme" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:colorAccent">#ADC0FF</item>
+        <item name="android:windowBackground">#0B1220</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+</resources>
+

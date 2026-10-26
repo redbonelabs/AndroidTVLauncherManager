@@ -1,0 +1,17 @@
+Android TV Launcher Manager
+Copyright (c) 2026 redbone labs
+
+Apache-2.0. Applicable Kotlin, JetBrains annotations, GWT and ThreeTen
+license/copyright notices are retained under licenses/ and in Android raw resources.
+See THIRD-PARTY-NOTICES.md for exact versions and source provenance.
+
+The Apache license template was directly reused from TV Box Tools at commit
+dbcc3e7b749e3d1c7ad50ee6dd85897010fff4a5. Its original appendix notice is retained here:
+Copyright 2026 Smartago LLC
+The template appendix was modified for this project's publisher in October 2026.
+This attribution covers the reused license template; it does not claim that
+Smartago authored this application's independently developed implementation.
+
+The commissioning owner confirmed sufficient rights to release inherited original Launcher Manager source/assets under Apache-2.0 as redbone labs on 26 October 2026. Applicable third-party notices remain retained.
+
+

@@ -1,0 +1,254 @@
+[
+  {
+    "Dependency": "android-api36",
+    "SHA256": "D9EB9DA824D9E247A352F570F01E1169E725B2954BCA9E283A71786C59B59F9A"
+  },
+  {
+    "Dependency": "android-build-tools-36.0.0/aapt.exe",
+    "SHA256": "C528418AF0C5152650D9532485F371E8EED98E1436D1AB1A197580B97917B561"
+  },
+  {
+    "Dependency": "android-build-tools-36.0.0/aapt2.exe",
+    "SHA256": "BABF3122E515DDB954C5AC4669E085CE990536C035E3072DE30127BDDD6E3608"
+  },
+  {
+    "Dependency": "android-build-tools-36.0.0/lib\\apksigner.jar",
+    "SHA256": "3716D9311E55D2B0918A2FD9D54BA9E406C5F6ABEEA700B287F11259BC163DEC"
+  },
+  {
+    "Dependency": "android-build-tools-36.0.0/zipalign.exe",
+    "SHA256": "C503C7DA88BD4F6CDDBCC8D3FEBD41E1E5022A525147F05F8CAF4602353409C0"
+  },
+  {
+    "Dependency": "annotations-13.0",
+    "SHA256": "ACE2A10DC8E2D5FD34925ECAC03E4988B2C0F851650C94B8CEF49BA1BD111478"
+  },
+  {
+    "Dependency": "d8-8.13.19",
+    "SHA256": "7712EDBAE6A71F35937FFC1BD5F4C202919EF2A5E58D3C3544015A868A3CF457"
+  },
+  {
+    "Dependency": "jdk-java",
+    "SHA256": "1978FDB39380F5B5666C8C499A29BC3440CE3BA97F07904B0C6CCE7B1ABAEF38"
+  },
+  {
+    "Dependency": "kotlin-stdlib-2.2.21",
+    "SHA256": "6558A3D233DA56A20934B32159F9DB5F86ED5816EF098F78A2C223DC6ABB79DD"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/allopen-compiler-plugin.jar",
+    "SHA256": "76643287B1B7523F1978892C5D346890652E5AADEADA5A323EC400DEAA54C684"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/annotations-13.0.jar",
+    "SHA256": "ACE2A10DC8E2D5FD34925ECAC03E4988B2C0F851650C94B8CEF49BA1BD111478"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/assignment-compiler-plugin.jar",
+    "SHA256": "4489D991061630A9940123E000C3AE6FD5DFC6332DDE065440454C680655320D"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/compose-compiler-plugin.jar",
+    "SHA256": "9B8557B39014B5064BE2ADD4B1A6E404B778C8C7DC4F7B815F376969D6FCFF99"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/jvm-abi-gen.jar",
+    "SHA256": "E2E41897599E035D4715F772A7E3714E27920D605385427539490764DD21C697"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-annotation-processing-cli.jar",
+    "SHA256": "266DAFF72B2705438B78F04A38911820E6DC506CFFBF1D601C208FD802861969"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-annotation-processing-runtime.jar",
+    "SHA256": "05482732D27FABA9AEE607E9A96B10DB94E05B1CDA206CE80A4FE68EB54861E8"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-annotation-processing.jar",
+    "SHA256": "A355DFA041FCFDA9C1BB1DD41A13173F14603A203F9E7F69A6939E7A6BFC698A"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-annotations-jvm-sources.jar",
+    "SHA256": "BF594D0E3A35C21B1F07097D9E10B6AB524AE5BB2FFDB92EA9B1F79F28E8AB09"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-annotations-jvm.jar",
+    "SHA256": "6054230599C840C69AF3657C292B768F2B585C25FBA91D26CD5AD8C992757B03"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-ant.jar",
+    "SHA256": "7D5E0D721BA578E1599413E8720FC904F96D6A090B490E6E64D6206745A8FC63"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-compiler.jar",
+    "SHA256": "0885D5546E3A18D8509AE99AAF735DECC7B88E0C33FC0287B5F74BC085A7CFF5"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-daemon-client.jar",
+    "SHA256": "3CE2CA3C5D7BC7C87C4149AC2C593D21A791D6776229AE123DB645A3017DE814"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-daemon.jar",
+    "SHA256": "1A97485E933282DE5BBFF9F8D1CC3EF042D3DD02B7BE4599BFBD5D4B1F170843"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-main-kts.jar",
+    "SHA256": "2F02E5867B2351896F43CEDC31F422CB5F37EF0BFE79B5DF4F2887DED20229CB"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-metadata-jvm-sources.jar",
+    "SHA256": "C55BD0D04E6D796D7D2CF0711281989D5E06B7DEF07100F80640B98AE1EBB788"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-metadata-jvm.jar",
+    "SHA256": "E181F32A21A3CDF195F974004A42F0067C2BD9DEAA2A883636748D83FDEFD99D"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-preloader.jar",
+    "SHA256": "4427C8AB142796E0F3D14E31AF1A7FE93DB69D23CBEB95FB46AE20B94784D28C"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-reflect-sources.jar",
+    "SHA256": "420EC3E59A8B7257A7AA2D3CBFF69B1979D7BD9006E432364A0F7644EE700BF6"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-reflect.jar",
+    "SHA256": "44380ABF37D245CE5C0F294F43512D1C39A59642BFA463922C74E96877CF49F8"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-runner.jar",
+    "SHA256": "D0DAE4EA0E6AD3E99FFC991027FA1586EEF1829B489B1008989D91FACD05678D"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-script-runtime-sources.jar",
+    "SHA256": "D9D6B416BF1267D5D9A2FFFB309C8D02FA707608154D7B0D7DD318D2DD7DAA96"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-script-runtime.jar",
+    "SHA256": "2B1519B427B514D1536C1B425674B03FE914AF637924028E9959C6625442DF51"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-scripting-common.jar",
+    "SHA256": "414ED91C3F5E4492B23CB9537842B4651038E25DAD84107939F434C2203F2A92"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-scripting-compiler-impl.jar",
+    "SHA256": "59E02CB5B10F322A906510F41410EE74FBE1FCA2AD811B7986703E06E95E6B55"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-scripting-compiler.jar",
+    "SHA256": "3CD2498B91F533143B5EC5C3FF7A37836874D059C8826AB2145ACF86EC3FB0AF"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-scripting-jvm.jar",
+    "SHA256": "83820C5FCC5D28F045F914ECD5900BBBCF8115B0D7007334DE069FE6C70669E6"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-serialization-compiler-plugin.jar",
+    "SHA256": "4746EFACB8FAC4239691908F239122BD0120558ADC5FD21BFAB209F27606B3BD"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-stdlib-jdk7-sources.jar",
+    "SHA256": "2534C8908432E06DE73177509903D405B55F423DD4C2F747E16B92A2162611E6"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-stdlib-jdk7.jar",
+    "SHA256": "B785922F11E6D91A6DD1D75CB0AEF1CE37B83F8DE0E3A2139139DFB823BB8A2C"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-stdlib-jdk8-sources.jar",
+    "SHA256": "3CB6895054A0985BBA591C165503FE4DD63A215AF53263B67A071CCDC242BF6E"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-stdlib-jdk8.jar",
+    "SHA256": "C62275C50EE591CA2F82C7BA42696B791600C25844F47E84BD9460302A0D5238"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-stdlib-js-sources.jar",
+    "SHA256": "BD50A7194B6059C69D8D8CB14A0EA2B1B0EBEA52CCF3C52119E65500CAD11200"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-stdlib-sources.jar",
+    "SHA256": "664F515359444A92267A13266101431A630F99D6B8D04407A92B1A0E558D33EE"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-stdlib.jar",
+    "SHA256": "6558A3D233DA56A20934B32159F9DB5F86ED5816EF098F78A2C223DC6ABB79DD"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-test-js-sources.jar",
+    "SHA256": "4A7A5F653F89107E847345688171BE7B2D4172332F7F9A5771B9240BF07E8F18"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-test-junit-sources.jar",
+    "SHA256": "C411A0DAD1218F3F652B6619F228FEFEE498903EE6E11C36C990FBC3FE823F18"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-test-junit.jar",
+    "SHA256": "5D88FCF9A56EE501FBF874EE65E82375EA1221423867C598FF29B11E0AD49317"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-test-junit5-sources.jar",
+    "SHA256": "891C56D8183D2CD3E912CF250ADECA889DBA51D02B07FCE3015321E08F72B4A2"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-test-junit5.jar",
+    "SHA256": "BA3C55B993598EFE5669C0B7F1082A107B291488D8E185E356470ED075D71AF7"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-test-sources.jar",
+    "SHA256": "C8445545032C2E09195FC883B274260DD414B33F2CDC1DADD4F3441C1A4E456B"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-test-testng-sources.jar",
+    "SHA256": "748366365D0B3E985289AAB702AECAB84D0BD8EF6DD104659E86C1F31359C5AA"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-test-testng.jar",
+    "SHA256": "4675E765D77E089EE8A5780A59D7E00B2138C590123D826E53C710EB3F97D17B"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlin-test.jar",
+    "SHA256": "612966DDEE4D3D0486156F10C77A57C5C47DAE65EB98A2BDDF34CF2AEEB894C4"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlinx-coroutines-core-jvm.jar",
+    "SHA256": "9860906A1937490BF5F3B06D2F0E10EF451E65B95B269F22DAF68A3D1F5065C5"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/kotlinx-serialization-compiler-plugin.jar",
+    "SHA256": "4746EFACB8FAC4239691908F239122BD0120558ADC5FD21BFAB209F27606B3BD"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/lombok-compiler-plugin.jar",
+    "SHA256": "6C4F23B21CDD54E0A1B0468ADC49C7C8C89A8F9DC1D4936671A0CFBF76F344D3"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/mutability-annotations-compat.jar",
+    "SHA256": "8C76693FDE1F34BAAEAF5298E1953FCA489C8E90CE6C065F96DD20D978C2003B"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/noarg-compiler-plugin.jar",
+    "SHA256": "69C24F98EF7E78AB0947338CB5CDA472D4853211C9FCE3C2734008A73DD210EA"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/parcelize-compiler.jar",
+    "SHA256": "4DC3120F50856A64D4653C32EDB7A133863BCAE81297DDD8590155D4535E4554"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/parcelize-runtime.jar",
+    "SHA256": "B441B7DBF84158B8EC50011D51BE5B55014170E2DDC6EBB0D47212874665A886"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/power-assert-compiler-plugin.jar",
+    "SHA256": "AF7D0AC9BCDFEEFF4139ED27B365590A0D5DE342F938AF2E3D7DCC7DA4975CED"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/sam-with-receiver-compiler-plugin.jar",
+    "SHA256": "13F2598F77063560E43FBCA892DF03F295CE5092A15CE37BB58C9671BAA78A6B"
+  },
+  {
+    "Dependency": "kotlin-2.2.21/lib/scripting-compiler.jar",
+    "SHA256": "3CD2498B91F533143B5EC5C3FF7A37836874D059C8826AB2145ACF86EC3FB0AF"
+  }
+]

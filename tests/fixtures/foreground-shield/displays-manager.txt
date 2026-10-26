@@ -1,0 +1,2 @@
+  mCurrentFocus=Window{abc123 u0 com.shieldtools.launchermanager/com.shieldtools.launchermanager.MainActivity}
+  mFocusedApp=ActivityRecord{abc123 u0 com.shieldtools.launchermanager/.MainActivity t1}

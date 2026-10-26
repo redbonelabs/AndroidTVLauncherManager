@@ -1,0 +1,26 @@
+{
+  "package": "com.shieldtools.launchermanager",
+  "versionName": "1.0.0",
+  "versionCode": 13,
+  "minSdk": 30,
+  "targetSdk": 34,
+  "compileSdk": 36,
+  "kotlin": "2.2.21",
+  "androidBuildTools": "36.0.0",
+  "dexCompiler": "8.13.19",
+  "java": "21",
+  "privilegedBackendIncluded": false,
+  "onDeviceAdb": true,
+  "switchingHardwareVerified": false,
+  "nativeLibraries": false,
+  "deviceInstallAuthorized": false
+}
+
+
+
+
+
+
+
+
+
