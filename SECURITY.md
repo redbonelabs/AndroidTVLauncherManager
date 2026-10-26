@@ -12,6 +12,7 @@ Tested configuration: Shield Pro mdarcy/API 30, including one Detox reboot and m
 
 ## Report a vulnerability privately
 
-Once the intended repository exists AND GitHub Private Vulnerability Reporting is enabled, open https://github.com/redbonelabs/AndroidTVLauncherManager/security/advisories/new or choose Security → Advisories → Report a vulnerability. Use that private form rather than public issues. Describe affected version, reproduction and impact; redact keys, credentials, private addresses and personal device data.
+GitHub Private Vulnerability Reporting is enabled. Open https://github.com/redbonelabs/AndroidTVLauncherManager/security/advisories/new or choose Security → Advisories → Report a vulnerability. Use that private form rather than public issues. Describe affected version, reproduction and impact; redact keys, credentials, private addresses and personal device data.
 
-This repository/reporting feature is NOT active during release preparation. Enabling it and verifying that the private report form is available is a mandatory gate BEFORE public release. If the form is unavailable, do not post sensitive details publicly; wait for the maintainer to enable it. No security email address or response-time guarantee is invented.
+The reporting feature was enabled and verified before source and release assets were uploaded. If the form is unavailable, do not post sensitive details publicly; wait for the maintainer to enable it. No security email address or response-time guarantee is invented.
+
