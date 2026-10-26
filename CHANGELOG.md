@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0 — prepared, not published
+## 1.0.0 — 26 October 2026
 
 First public-release candidate by redbone labs, Apache-2.0. Package `com.shieldtools.launchermanager`, versionCode 13; existing approved signer retained for in-place upgrades.
 
@@ -15,3 +15,4 @@ Application logic is unchanged from hardware-verified 0.4.7-dev/code 12. Version
 Tested configuration: NVIDIA Shield Pro mdarcy, Android TV 11/API30, NVIDIA firmware9.2.4. Stock/Detox/Projectivy switching passed; one Detox reboot-persistence/manual reconnect/exact Stock restoration trial passed. Other devices and Projectivy reboot persistence are not verified.
 
 Known limits: explicit Connect after reboot/process death; classic ADB shell authority; journal ownership may reject restoration after external/intermediate changes; no guaranteed rollback after loss of process/authorization; preview Back is not guaranteed.
+

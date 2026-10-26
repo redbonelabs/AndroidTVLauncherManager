@@ -1,6 +1,6 @@
 # v1.0.0
 
-Prepared locally for `redbonelabs/AndroidTVLauncherManager`; not yet published.
+Published at https://github.com/redbonelabs/AndroidTVLauncherManager/releases/tag/v1.0.0 .
 
 A lightweight, remote-friendly launcher manager by **redbone labs**, licensed under Apache-2.0.
 
@@ -25,4 +25,5 @@ SHA-256: `974333280afd72c4d6b4b79194bf2976d053931205e8490c40322fa6cf6a48e2`
 Signer certificate SHA-256: `efde12513ce1b08e0ea49477037eb214fe91a39755a451e3f739849e5723455b`.
 
 Signed artifact package/signature/version compatibility with existing development installs was verified statically; no Shield installation or hardware test was performed for this release artifact.
+
 

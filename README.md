@@ -2,7 +2,7 @@
 
 A lightweight launcher manager by **redbone labs** for NVIDIA Shield Pro. Discover HOME launchers, preview them, switch using the TV remote and restore NVIDIA Stock without root or a separate helper.
 
-**v1.0.0 / versionCode 13 is prepared locally, not published.** The hardware-verified development baseline is 0.4.7-dev/code 12; this release retains its application logic. Application ID: `com.shieldtools.launchermanager`.
+**[v1.0.0 / versionCode 13 is available](https://github.com/redbonelabs/AndroidTVLauncherManager/releases/tag/v1.0.0).** The hardware-verified development baseline is 0.4.7-dev/code 12; this release retains its application logic. Application ID: `com.shieldtools.launchermanager`.
 
 ## Compatibility
 
@@ -21,7 +21,7 @@ No root, helper, network scan, telemetry, generic console, accessibility interce
 
 ## Installation and upgrades
 
-When published, obtain the APK only from `redbonelabs/AndroidTVLauncherManager` releases. No v1.0 download exists until the maintainer publishes the release. Verify the published SHA-256 and signing certificate first.
+Obtain the signed APK and SHA256SUMS.txt from the [v1.0.0 release](https://github.com/redbonelabs/AndroidTVLauncherManager/releases/tag/v1.0.0). Verify the published SHA-256 and signing certificate first.
 
 ```powershell
 $adb = '<platform-tools-directory>\adb.exe'
@@ -59,6 +59,7 @@ Process death, reboot, lost authorization or corruption can prevent rollback. Cl
 
 [Windows build instructions](docs/BUILDING.md) describe the configurable standalone build. Bit-identical builds on independent PCs are not yet established.
 
-Copyright (c) 2026 redbone labs. See [LICENSE](LICENSE), [NOTICE](NOTICE) and [third-party notices](THIRD-PARTY-NOTICES.md). Original-project release rights were confirmed by the commissioning owner; third-party attribution is retained. See [draft notes](RELEASE-NOTES.md) and [release checklist](RELEASE-CHECKLIST.md).
+Copyright (c) 2026 redbone labs. See [LICENSE](LICENSE), [NOTICE](NOTICE) and [third-party notices](THIRD-PARTY-NOTICES.md). Original-project release rights were confirmed by the commissioning owner; third-party attribution is retained. See [release notes](RELEASE-NOTES.md) and [release checklist](RELEASE-CHECKLIST.md).
+
 
 
