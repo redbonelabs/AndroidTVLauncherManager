@@ -74,7 +74,9 @@ object LauncherSafety {
     }
 }
 
-data class LauncherSnapshot(val homes: List<HomeEntry>, val resolvedHome: String?, val ownerUser: Boolean)
+data class LauncherSnapshot(val homes: List<HomeEntry>, val resolvedHome: String?, val ownerUser: Boolean) {
+    val homeResolution: HomeResolution get() = HomeRules.resolve(resolvedHome, homes)
+}
 data class HelperCapability(val available: Boolean, val authenticated: Boolean, val generation: String?)
 data class RecoveryProof(val workingHome: String?, val tested: Boolean, val journalDurable: Boolean)
 

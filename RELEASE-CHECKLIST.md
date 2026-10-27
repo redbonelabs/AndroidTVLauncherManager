@@ -1,17 +1,25 @@
-# v1.0 publication checklist
+# v1.0.1 release gates
 
-- [x] Source-rights confirmation recorded from the commissioning owner; inherited project released under Apache-2.0 with applicable third-party notices retained.
-- [x] Existing signer approved and consolidated privately; local-only storage risk accepted by owner. No independent disaster-recovery backup is claimed.
-- [x] Public docs cover tested Shield configuration, install/update, explicit ADB setup, consent/expiry/Keep and emergency recovery.
-- [x] v1.0.0/code13 metadata prepared; application ID and Kotlin logic unchanged.
-- [x] Public allowlist includes reviewed CHANGELOG in addition to the prior72 files; personal machine/evidence data excluded.
-- [x] Local v1.0 build passed 187 JVM/12 dialog/45 artifact checks; package/version/signature/checksum and exact staged public-source scan passed. Final local commit/history scan is recorded in the private release report.
-- [ ] Obtain final approval BEFORE any GitHub repository creation, push, APK upload or publication.
-- [ ] After approval, create the empty public repository, enable GitHub Private Vulnerability Reporting and verify its private submission form BEFORE pushing source or publishing the APK release. GitHub documents this feature for public repositories.
-- [ ] Push only the scanned local commit, tag the exact v1.0.0 source, and publish the signed APK, checksum, signer fingerprint and release notes.
+Release: versionName 1.0.1, versionCode 17, annotated tag v1.0.1. Runtime source must match the validated code-16 baseline; only release metadata, build-report wording and documentation change during packaging.
 
-No new hardware test is required/proposed by this checklist; none was performed during release preparation. Independent-PC/bit-identical reproducibility is not claimed. No GitHub operation is authorized until final approval.
+## Before commit and publication
 
+- Preserve the existing public repository and history; verify origin, local author identity, remote synchronization and account write permission. Never force-push or recreate v1.0.0.
+- Use PUBLIC-FILES.txt as the exact source allowlist. Stage no private tools, local configuration, APKs, signing stores/passwords, credentials, diagnostic captures or transaction journals.
+- Retain Apache-2.0, copyright, third-party notices and private security reporting.
+- Document mdarcy and sif / NVIDIA / API 30 support with distinct Pro, primary Tube and second Tube evidence. Do not infer unperformed hardware tests.
+- Build from the synchronized public source with the original signer. Require 216 JVM tests, 17 consent/setup checks, 14 mocked recovery checks and 50 artifact/security checks.
+- Verify package/version, API-30 signature, original certificate, absence of native ABI payloads/debug behavior/unintended permissions, and data-preserving upgrade compatibility.
+- Compare release runtime source and DEX with code 16. Review any difference before publishing.
+- Generate SHA256SUMS.txt. Review staged diff, exact allowlist, full reachable history, release asset bytes, private markers and known credential leakage without printing secrets.
 
-GitHub reporting setup reference: https://docs.github.com/en/code-security/how-tos/report-and-fix-vulnerabilities/configure-vulnerability-reporting/configure-for-a-repository
+## Publication procedure
 
+1. Commit the reviewed source with the established redbone labs identity.
+2. Create an annotated v1.0.1 tag on that commit; preserve the existing v1.0.0 ref/release.
+3. Re-fetch before push and verify the update is a fast-forward; stop on unexpected remote work.
+4. Push main and the new tag without force.
+5. Publish v1.0.1 with the signed APK and SHA256SUMS.txt. GitHub supplies source archives for the tag.
+6. Verify release metadata, links, downloaded APK/checksum, signer, source commit, annotated tag and public documentation.
+
+The owner authorized this release workflow. Authentication must use normal browser/credential-manager flows; never request secrets in chat. Stop on failed tests, signing, privacy audit or integrity checks. No Shield contact, installation, switching or configuration change is part of publication.

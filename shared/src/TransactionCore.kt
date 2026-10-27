@@ -2,6 +2,8 @@ package com.shieldtools.launchermanager.backend
 
 import com.shieldtools.launchermanager.HomeEntry
 import com.shieldtools.launchermanager.LauncherSafety
+import com.shieldtools.launchermanager.HomeValidationException
+import com.shieldtools.launchermanager.HomeRules
 import java.security.MessageDigest
 import java.util.UUID
 
@@ -74,6 +76,7 @@ class TransactionEngine(private val port: DevicePort, private val journal: Journ
         check(ledger.active == null || ledger.active!!.phase in terminal || kind == IntentKind.RECOVER) { "Recover pending transaction first" }
         val before = port.inspect()
         check(before.user == 0) { "Only owner user 0 is supported" }
+        if (before.home == null) throw HomeValidationException(HomeRules.CHOICE_GUIDANCE)
         check(port.recoveryReady()) { "Independent recovery readiness not acknowledged/validated" }
         if (kind == IntentKind.RECOVER) {
             val active = ledger.active ?: error("No journal to recover")
@@ -135,7 +138,9 @@ class TransactionEngine(private val port: DevicePort, private val journal: Journ
             expiredTicket = Triple(pending.owner, pending.id, generation)
             error(expiredMessage)
         }
-        check(port.inspect().fingerprint() == pending.before.fingerprint()) { "Device state changed; reconfirm" }
+        val fresh = port.inspect()
+        if (fresh.home == null) throw HomeValidationException(HomeRules.CHOICE_GUIDANCE)
+        check(fresh.fingerprint() == pending.before.fingerprint()) { "Device state changed; reconfirm" }
         check(!pending.needsEnable || enableConsent) { "Explicit target-enable consent required" }
         check(!pending.stockConsentNeeded || stockConsent) { "Explicit stock-only disable consent required" }
         activeOwner = owner

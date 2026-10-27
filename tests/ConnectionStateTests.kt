@@ -1,5 +1,9 @@
 package com.shieldtools.launchermanager.backend
 
+import com.shieldtools.launchermanager.HomeValidationException
+import com.shieldtools.launchermanager.HomeRules
+import com.shieldtools.launchermanager.HomeStatus
+
 fun main() {
     var passed=0
     fun test(name: String, run: () -> Unit) { run(); passed++; println("PASS $name") }
@@ -48,6 +52,18 @@ fun main() {
     test("error presentation is bounded and retains the exception type") {
         val s=ConnectionState(); s.failed(IllegalArgumentException("bad\n"+"x".repeat(500)))
         check(s.error!!.length<=320 && !s.error!!.contains('\n') && s.error!!.startsWith("IllegalArgumentException:"))
+    }
+    test("HOME validation failure preserves authenticated transport state and allows a later health read") {
+        val s=ConnectionState(); s.connected(); var reads=0
+        val failure=runCatching { s.healthCheck(true){reads++; throw HomeValidationException("HOME readings disagree") } }.exceptionOrNull()
+        check(failure is HomeValidationException && reads==1 && s.state==ConnectionState.State.CONNECTED && s.error==null)
+        check(s.healthCheck(true){"verified after Android selection"}.startsWith("verified"))
+    }
+    test("agreed chooser keeps ADB connected while providing no mutation baseline") {
+        val s=ConnectionState(); s.connected()
+        val chooser="android/com.android.internal.app.ResolverActivity"
+        val home=s.healthCheck(true){HomeRules.requireAgreement(chooser,chooser,emptyList())}
+        check(home.status==HomeStatus.NEEDS_CHOICE && home.component==null && s.state==ConnectionState.State.CONNECTED)
     }
     println("$passed connection-state tests passed")
 }

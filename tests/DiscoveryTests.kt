@@ -44,5 +44,44 @@ fun main(args: Array<String>) {
     discoveryTest("optional signer/version failure does not erase a HOME card") { val partial = detox.copy(versionCode = -1, signerDigest = "unavailable"); val found = DiscoveryRules.summarize(listOf(partial), detox.component, listOf("signing metadata unavailable")); check(found.cardHomes == listOf(partial)); check(found.warnings.isNotEmpty()) }
     discoveryTest("invisible known recovery package is unconfirmed rather than absent") { val status = PackageObservation(LauncherSafety.STOCK, null, null, false, "visibility limited"); check(status.status.contains("unconfirmed")); check(!status.status.contains("uninstalled")) }
     discoveryTest("metadata-only disabled package is distinct from confirmed HOME activity") { val status = PackageObservation(LauncherSafety.STOCK, true, false, false, "HOME activity not visible"); check(status.status == "Installed but disabled"); check(!status.homeConfirmed); check(PackageObservation(LauncherSafety.STOCK, true, null, false, "restricted").status.contains("unknown")) }
+    val projectivy = sampleHome("com.spocky.projengmenu")
+    val three = listOf(stock, detox, projectivy)
+    val chooser = "android/com.android.internal.app.ResolverActivity"
+    fun homeRejected(body: () -> Unit) { check(runCatching(body).exceptionOrNull() is HomeValidationException) }
+    discoveryTest("single resolved default is conclusively selected") { check(HomeRules.resolve(detox.component, listOf(detox)).status == HomeStatus.SELECTED) }
+    discoveryTest("three launchers retain a verified Detox default and all discovery cards") {
+        check(DiscoveryRules.summarize(three, detox.component).cardHomes.size == 3)
+        val resolved = HomeRules.resolve(detox.component, three)
+        check(resolved.isCurrent(detox.component)); check(!resolved.isCurrent(projectivy.component)); check(!resolved.isCurrent(stock.component))
+    }
+    discoveryTest("Android chooser means no selected default without erasing launcher discovery") {
+        val resolved = HomeRules.resolve(chooser, three)
+        check(resolved.status == HomeStatus.NEEDS_CHOICE && resolved.component == null)
+        check(three.none { resolved.isCurrent(it.component) }); check(DiscoveryRules.summarize(three, chooser).cardHomes.size == 3)
+    }
+    discoveryTest("multiple candidates with null resolution need Android selection") { check(HomeRules.resolve(null, three).status == HomeStatus.NEEDS_CHOICE) }
+    discoveryTest("candidate availability alone never invents a default even with one candidate") { check(HomeRules.resolve(null, listOf(detox)).component == null) }
+    discoveryTest("Already HOME comparison canonicalizes shorthand only for a selected default") {
+        val full = detox.copy(activityName = "${detox.packageName}.MainActivity")
+        check(HomeRules.resolve("${full.packageName}/.MainActivity", listOf(full)).isCurrent(full.component))
+        check(!HomeRules.resolve(chooser, listOf(full)).isCurrent(full.component))
+    }
+    discoveryTest("shell and app agree on selected HOME despite component shorthand") {
+        val full = detox.copy(activityName = "${detox.packageName}.MainActivity")
+        check(HomeRules.requireAgreement(full.component, "priority=0\n${full.packageName}/.MainActivity", listOf(full)).isCurrent(full.component))
+    }
+    discoveryTest("agreed shell and app chooser supports read-only inspection without a switch baseline") {
+        val resolved = HomeRules.requireAgreement(chooser, "priority=0\n$chooser", three)
+        check(resolved.component == null && resolved.status == HomeStatus.NEEDS_CHOICE)
+    }
+    discoveryTest("different real HOME readings remain a typed validation failure") { homeRejected { HomeRules.requireAgreement(detox.component, projectivy.component, three) } }
+    discoveryTest("chooser versus selected default is disagreement rather than authentication failure") { homeRejected { HomeRules.requireAgreement(detox.component, chooser, three) } }
+    discoveryTest("malformed or multiple shell results are not accepted as a verified HOME") {
+        listOf("", "Success", "${detox.component}\n${projectivy.component}").forEach { output -> homeRejected { HomeRules.requireAgreement(detox.component, output, three) } }
+    }
+    discoveryTest("unreadable or disabled resolved HOME never receives Already HOME") {
+        check(HomeRules.resolve(detox.component, emptyList()).status == HomeStatus.UNVERIFIED)
+        check(!HomeRules.resolve(stock.component, three).isCurrent(stock.component))
+    }
     println("$discoveryPassed discovery tests passed. Fixture and policy tests only; no Android device used.")
 }

@@ -7,8 +7,8 @@ android {
         applicationId = "com.shieldtools.launchermanager"
         minSdk = 30
         targetSdk = 34
-        versionCode = 13
-        versionName = "1.0.0"
+        versionCode = 17
+        versionName = "1.0.1"
     }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_1_8; targetCompatibility = JavaVersion.VERSION_1_8 }
     kotlinOptions { jvmTarget = "1.8" }
@@ -17,6 +17,7 @@ android {
 }
 
 dependencies { implementation("org.jetbrains.kotlin:kotlin-stdlib:2.2.21") }
+
 
 
 

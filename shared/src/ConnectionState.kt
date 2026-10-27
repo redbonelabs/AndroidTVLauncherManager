@@ -1,5 +1,7 @@
 package com.shieldtools.launchermanager.backend
 
+import com.shieldtools.launchermanager.HomeValidationException
+
 /** In-memory connection UX only; never authorizes, reconnects or repeats a switch. */
 class ConnectionState {
     enum class State { DISCONNECTED, CONNECTING, CONNECTED, FAILED }
@@ -26,7 +28,10 @@ class ConnectionState {
     fun <T> healthCheck(transportReady: Boolean, read: () -> T): T {
         observe(transportReady)
         check(state == State.CONNECTED && transportReady) { message() }
-        try { return read() } catch (cause: Exception) {
+        try { return read() } catch (cause: HomeValidationException) {
+            // The authenticated transport remains usable for read-only diagnosis.
+            throw cause
+        } catch (cause: Exception) {
             failed(cause)
             throw IllegalStateException(message(),cause)
         }

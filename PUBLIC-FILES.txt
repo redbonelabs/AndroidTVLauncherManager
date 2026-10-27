@@ -52,6 +52,7 @@ shared/src/HelperWire.kt
 shared/src/JournalCodec.kt
 shared/src/LauncherAdbOperation.kt
 shared/src/OnDeviceCommands.kt
+shared/src/ShieldDevicePolicy.kt
 shared/src/TransactionCore.kt
 tests/backend/BackendTests.kt
 tests/ConnectionStateTests.kt
@@ -68,6 +69,8 @@ tests/ForegroundTests.kt
 tests/NativeAdbTests.kt
 tests/OnDeviceCommandTests.kt
 tests/RecoveryDialogContractTests.ps1
+tests/RecoveryScriptTests.ps1
 tests/SafetyTests.kt
+tests/ShieldDevicePolicyTests.kt
 THIRD-PARTY-NOTICES.md
 Verify-LocalArtifact.ps1

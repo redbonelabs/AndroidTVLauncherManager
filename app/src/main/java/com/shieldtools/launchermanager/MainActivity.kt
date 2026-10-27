@@ -114,8 +114,16 @@ class MainActivity : Activity() {
         root.addView(text("redbone labs", 14f, accent))
         root.addView(text("Android TV Launcher Manager", 32f, ink, true))
         root.addView(text("Your home screens, in one place", 18f, muted))
-        val current = data?.launchers?.firstOrNull { group -> group.activities.any { it.component == data.snapshot.resolvedHome } }
-        root.addView(text("HOME  ${current?.title ?: data?.snapshot?.resolvedHome ?: "Reading installed launchers…"}", 18f, Color.rgb(120, 224, 188)).apply { setPadding(0, dp(16), 0, dp(8)) })
+        val resolution = data?.snapshot?.homeResolution
+        val current = data?.launchers?.firstOrNull { group -> group.activities.any { resolution?.isCurrent(it.component) == true } }
+        val homeLabel = when (resolution?.status) {
+            HomeStatus.SELECTED -> current?.title ?: resolution.component
+            HomeStatus.NEEDS_CHOICE -> "No default selected"
+            HomeStatus.UNVERIFIED -> "Default could not be verified"
+            null -> "Reading installed launchers…"
+        }
+        root.addView(text("HOME  $homeLabel", 18f, Color.rgb(120, 224, 188)).apply { setPadding(0, dp(16), 0, dp(8)) })
+        if (resolution != null && resolution.guidance.isNotEmpty()) root.addView(text(resolution.guidance, 17f, accent))
         root.addView(text(notice, 16f, muted))
         root.addView(text(sessionMessage, 15f, accent))
         if (data != null && data.errors.isNotEmpty()) root.addView(text("Discovery has read limitations. Open Advanced Status for details.", 16f, accent))
@@ -154,7 +162,7 @@ class MainActivity : Activity() {
 
     private fun card(group: LauncherGroup, data: HomeInventory): View {
         val entry = group.primary(data.snapshot.resolvedHome)
-        val current = group.activities.any { it.component == data.snapshot.resolvedHome }
+        val current = group.activities.any { data.snapshot.homeResolution.isCurrent(it.component) }
         val card = column().apply { background = shape(panel, if (current) Color.rgb(85, 151, 137) else Color.rgb(40, 57, 84)); setPadding(dp(20), dp(18), dp(20), dp(18)) }
         val header = row()
         header.addView(ImageView(this).apply {
@@ -181,7 +189,7 @@ class MainActivity : Activity() {
         })
         controls.addView(action(if (current) "Already HOME" else "Activate HOME", "select:${group.packageName}") {
             if (current) message("Already HOME", "Android currently resolves HOME to ${data.snapshot.resolvedHome}. No change is needed.")
-            else requestNativeSwitch("SELECT", entry.component)
+            else requestActivation(entry)
         })
         card.addView(controls)
         return card
@@ -189,7 +197,7 @@ class MainActivity : Activity() {
 
     private fun confirmPreview(entry: HomeEntry) {
         AlertDialog.Builder(this).setTitle("Preview ${entry.label}?")
-            .setMessage("Open ${entry.component} without requesting a HOME change.\n\nHome still opens your current default. Some launchers ignore Back; reopen this manager from its app tile. A third-party launcher may display its own setup prompts—do not approve unrelated changes.")
+            .setMessage("Open ${entry.component} without requesting a HOME change.\n\nFinish any first-run setup here, outside activation. No activation countdown or switch transaction is running. Android permission prompts require your own decision; nothing is granted automatically. Leave launcher override/accessibility options off. HOME still opens your existing default. Return to Manager from its tile, choose Activate HOME, and review activation only after setup has reached the launcher's home screen.")
             .setNegativeButton("Cancel", null).setPositiveButton("Preview") { _, _ ->
                 try {
                     previewHomeBefore = repository.resolveHome()
@@ -212,7 +220,7 @@ class MainActivity : Activity() {
     private fun advanced() {
         val data = inventory ?: return
         val detail = buildString {
-            append("Effective HOME\n${data.snapshot.resolvedHome ?: "No resolved HOME"}\n\n")
+            append("Verified default HOME\n${data.snapshot.homeResolution.component ?: data.snapshot.homeResolution.guidance}\nRaw Android HOME resolution: ${data.snapshot.resolvedHome ?: "none"}\n\n")
             append("Discovery diagnostics\n${data.diagnostics.joinToString("\n")}\n\n")
             if (data.errors.isNotEmpty()) append("Read warnings\n${data.errors.joinToString("\n")}\n\n")
             append("Package visibility\n")
@@ -241,11 +249,64 @@ class MainActivity : Activity() {
                 val result = work()
                 runOnUiThread { if (!isDestroyed && !isFinishing) done(result) }
             } catch (error: Exception) {
-                runOnUiThread { if (!isDestroyed && !isFinishing) { connecting=false; notice=""; message("Local ADB action unavailable", error.message ?: error.javaClass.simpleName); refresh() } }
+                runOnUiThread { if (!isDestroyed && !isFinishing) { connecting=false; notice=""; message(if (error is HomeValidationException) "HOME selection needs attention" else "Local ADB action unavailable", error.message ?: error.javaClass.simpleName); refresh() } }
             }
         }
     }
+    private fun requestActivation(entry: HomeEntry) {
+        if (entry.packageName == LauncherSafety.STOCK) {
+            requestNativeSwitch("SELECT", entry.component)
+            return
+        }
+        if (!LauncherSafety.canPreview(entry)) {
+            message("Launcher setup unavailable", "The target must be enabled and eligible before it can be prepared. No changes were made.")
+            return
+        }
+        // Setup is an ordinary preview, before any ticket, journal write, HOME request,
+        // package change or activation deadline. Real activation retains strict verification.
+        val setupComplete = CheckBox(this).apply {
+            id = View.generateViewId()
+            text = "I finished setup and saw this launcher's home screen"
+            textSize = 18f
+            isChecked = false
+            isFocusable = true
+            minHeight = dp(64)
+            setPadding(dp(24), dp(8), dp(24), dp(8))
+        }
+        val dialog = AlertDialog.Builder(this).setTitle("Prepare ${entry.label} before activation")
+            .setMessage("First-run onboarding and permission dialogs are setup, not a working HOME screen. Use Preview / finish setup and complete them at your own pace. Your current HOME stays selected. Then reopen Manager and choose Activate HOME again. If setup is already complete, acknowledge it below and review the normal activation consent. Actual HOME and foreground checks remain required.")
+            .setView(setupComplete)
+            .setNegativeButton("Cancel", null)
+            .setNeutralButton("Preview / finish setup") { _, _ -> confirmPreview(entry) }
+            .setPositiveButton("Review activation") { _, _ ->
+                if (setupComplete.isChecked) requestNativeSwitch("SELECT", entry.component)
+            }.create()
+        dialog.setOnShowListener {
+            val review = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            val preview = dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
+            val cancel = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            review.isEnabled = false
+            fun updateReview(checked: Boolean) {
+                review.isEnabled = checked
+                setupComplete.nextFocusDownId = if (checked) review.id else preview.id
+                setupComplete.nextFocusForwardId = setupComplete.nextFocusDownId
+            }
+            setupComplete.setOnCheckedChangeListener { _, checked -> updateReview(checked) }
+            updateReview(setupComplete.isChecked)
+            review.nextFocusUpId = setupComplete.id
+            preview.nextFocusUpId = setupComplete.id
+            cancel.nextFocusUpId = setupComplete.id
+            setupComplete.requestFocus()
+        }
+        dialog.show()
+    }
+
     private fun requestNativeSwitch(mode: String, component: String = "") {
+        val resolution = inventory?.snapshot?.homeResolution
+        if (resolution == null || resolution.status != HomeStatus.SELECTED) {
+            message("Choose a default HOME first", resolution?.guidance ?: HomeRules.CHOICE_GUIDANCE)
+            return
+        }
         // A platform AlertDialog message hides its list content. Use a custom
         // CheckBox view so the explanation and acknowledgement both remain visible.
         // This acknowledges recovery readiness, NOT stock-disable consent.

@@ -29,7 +29,9 @@ internal object NativeSwitchSession {
             val connection = connectLoopback(AdbIdentity(context.applicationContext).loadOrCreate())
             adb = connection
             val port = NativeAdbPort(context.applicationContext,connection)
-            port.verifyPeer(); observedHome = port.inspect().home
+            port.verifyPeer()
+            try { observedHome = port.inspect().home }
+            catch (e: HomeValidationException) { lastError = e.message.orEmpty() }
             observedForeground = port.foreground()
             engine = TransactionEngine(port,journal ?: error("Journal unavailable"),true)
             connectionUx.connected()
@@ -61,9 +63,11 @@ internal object NativeSwitchSession {
                 val live = connectedEngine()
                 // Existing observation checks same boot, owner user and actual HOME.
                 observedHome = live.observation().home
+                lastError = ""
                 live
             }
-        } catch (e: Exception) { adb?.close(); throw e }
+        } catch (e: HomeValidationException) { lastError = e.message.orEmpty(); throw e }
+        catch (e: Exception) { adb?.close(); throw e }
     }
     fun prepare(mode: String, component: String, recoveryAcknowledged: Boolean): Bundle {
         check(recoveryAcknowledged) { "Independent recovery must be acknowledged" }

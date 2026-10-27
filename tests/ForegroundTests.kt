@@ -42,5 +42,17 @@ fun main(args: Array<String>) {
         check(LauncherAdbOperation.Enabled.of(e,0).command == "pm default-state --user 0 com.google.android.tvlauncher")
         check(LauncherAdbOperation.Focus.command == "dumpsys window displays" && LauncherAdbOperation.Activities.command == "dumpsys activity activities")
     }
+    test("Projectivy onboarding is a different activity from the target HOME") {
+        val onboarding="com.spocky.projengmenu/com.spocky.projengmenu.ui.onboarding.OnboardingActivity"
+        val w="mCurrentFocus=Window{abc u0 $onboarding}\nmFocusedApp=ActivityRecord{def u0 $onboarding t1}"
+        val a="Display #0 (activities from top to bottom):\nmResumedActivity: ActivityRecord{def u0 $onboarding t1}"
+        val result=ForegroundDetector.inspect(w,a)
+        check(result.component==onboarding && result.component!="com.spocky.projengmenu/com.spocky.projengmenu.ui.home.MainActivity")
+    }
+    test("permission transition with null focus reproduces preserved failure without granting HOME proof") {
+        val permission="com.google.android.permissioncontroller/com.android.permissioncontroller.permission.ui.GrantPermissionsActivity"
+        val result=ForegroundDetector.inspect("mCurrentFocus=null\nmFocusedApp=ActivityRecord{abc u0 $permission t1}","Display #0 (activities from top to bottom):\nmResumedActivity: ActivityRecord{abc u0 $permission t1}")
+        check(result.component==null && result.detail.contains("null/malformed/non-owner window focus"))
+    }
     println("$passed foreground capture/regression tests passed")
 }

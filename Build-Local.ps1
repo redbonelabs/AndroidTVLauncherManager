@@ -36,7 +36,7 @@ try {
     $model = "$projectRoot\app\src\main\java\com\shieldtools\launchermanager\SafetyModel.kt"
     $discoveryModel = "$projectRoot\app\src\main\java\com\shieldtools\launchermanager\DiscoveryModel.kt"
     $backendSources = @((Get-ChildItem -LiteralPath "$projectRoot\shared\src" -Filter '*.kt' -File).FullName)
-    & "$javaRoot\bin\java.exe" -cp "$compiler\lib\*" org.jetbrains.kotlin.cli.jvm.K2JVMCompiler -no-stdlib -no-reflect -jvm-target 1.8 -classpath "$compiler\lib\kotlin-stdlib.jar" -d "$output\tests" $model $discoveryModel @backendSources "$projectRoot\tests\SafetyTests.kt" "$projectRoot\tests\DiscoveryTests.kt" "$projectRoot\tests\backend\BackendTests.kt" "$projectRoot\tests\OnDeviceCommandTests.kt" "$projectRoot\tests\NativeAdbTests.kt" "$projectRoot\tests\ForegroundTests.kt" "$projectRoot\tests\ConnectionStateTests.kt"
+    & "$javaRoot\bin\java.exe" -cp "$compiler\lib\*" org.jetbrains.kotlin.cli.jvm.K2JVMCompiler -no-stdlib -no-reflect -jvm-target 1.8 -classpath "$compiler\lib\kotlin-stdlib.jar" -d "$output\tests" $model $discoveryModel @backendSources "$projectRoot\tests\SafetyTests.kt" "$projectRoot\tests\DiscoveryTests.kt" "$projectRoot\tests\backend\BackendTests.kt" "$projectRoot\tests\OnDeviceCommandTests.kt" "$projectRoot\tests\NativeAdbTests.kt" "$projectRoot\tests\ForegroundTests.kt" "$projectRoot\tests\ConnectionStateTests.kt" "$projectRoot\tests\ShieldDevicePolicyTests.kt"
     if ($LASTEXITCODE -ne 0) { throw 'Safety test compile failed.' }
     & "$javaRoot\bin\java.exe" -cp "$output\tests;$compiler\lib\kotlin-stdlib.jar" com.shieldtools.launchermanager.SafetyTestsKt | Tee-Object -FilePath "$output\safety-test-results.txt"
     if ($LASTEXITCODE -ne 0) { throw 'Safety tests failed.' }
@@ -52,6 +52,9 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Foreground capture/regression tests failed.' }
     & "$javaRoot\bin\java.exe" -cp "$output\tests;$compiler\lib\kotlin-stdlib.jar" com.shieldtools.launchermanager.backend.ConnectionStateTestsKt | Tee-Object -FilePath "$output\connection-state-tests.txt"
     if ($LASTEXITCODE -ne 0) { throw 'Connection state tests failed.' }
+    & "$javaRoot\bin\java.exe" -cp "$output\tests;$compiler\lib\kotlin-stdlib.jar" com.shieldtools.launchermanager.backend.ShieldDevicePolicyTestsKt | Tee-Object -FilePath "$output\shield-device-tests.txt"
+    if ($LASTEXITCODE -ne 0) { throw 'Shield device policy tests failed.' }
+    & "$projectRoot\tests\RecoveryScriptTests.ps1" -ProjectRoot $projectRoot -OutputDirectory "$output\tests" | Tee-Object -FilePath "$output\recovery-script-tests.txt"
     $classFiles = @((Get-ChildItem -LiteralPath "$output\classes" -Filter '*.class' -File -Recurse).FullName)
     & "$javaRoot\bin\java.exe" -cp $dexCompiler com.android.tools.r8.D8 --version | Set-Content -LiteralPath "$output\dex-compiler.txt"
     & "$javaRoot\bin\java.exe" -cp $dexCompiler com.android.tools.r8.D8 --min-api $config.minSdk --release --lib $androidJar --output "$output\dex" @classFiles "$compiler\lib\kotlin-stdlib.jar" "$compiler\lib\annotations-13.0.jar" *> "$output\dex-build.log"
@@ -84,6 +87,7 @@ try {
     [pscustomobject]@{Apk=$apk;SHA256=$hash.Hash;Bytes=(Get-Item -LiteralPath $apk).Length;BuildId=$BuildId;InstalledOnDevice=$false} | ConvertTo-Json | Tee-Object -FilePath "$output\artifact.json"
 } finally { $env:JAVA_HOME = $oldJavaHome }
 # No ADB, install, service, HOME or package-manager device operation is part of this build.
+
 
 
 

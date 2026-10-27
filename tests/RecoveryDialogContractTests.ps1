@@ -23,4 +23,12 @@ Assert-Contract ($body -match 'if \(acknowledged.isChecked\) prepareNativeSwitch
 Assert-Contract ($body -match 'setNegativeButton\("Cancel",null\)' -and $body -notmatch 'NativeSwitchSession\.|\.confirm\(|\.setEnabled\(') 'Cancel/Back cannot perform any switching operation in readiness dialog'
 Assert-Contract ($source -notmatch 'override fun onKey|setOnKeyListener') 'Native CheckBox DPAD_CENTER/Enter handling is not intercepted'
 Assert-Contract ($source -match 'setNegativeButton\("Cancel"\).*NativeSwitchSession.cancel\(ticket\)' -and $source -match 'setOnCancelListener.*NativeSwitchSession.cancel\(ticket\)') 'Final review Cancel and Back cancel the one-use transaction ticket'
+$setup = (($source -split 'private fun requestActivation\(')[1] -split 'private fun requestNativeSwitch\(')[0]
+$preview = (($source -split 'private fun confirmPreview\(')[1] -split 'private fun chooseActivity\(')[0]
+$cards = (($source -split 'private fun card\(')[1] -split 'private fun confirmPreview\(')[0]
+Assert-Contract ($cards.Contains('else requestActivation(entry)')) 'New launcher activation enters setup review before switching consent'
+Assert-Contract ($setup.Contains('isChecked = false') -and $setup.Contains('review.isEnabled = false') -and $setup.Contains('review.isEnabled = checked') -and $setup.Contains('if (setupComplete.isChecked) requestNativeSwitch("SELECT", entry.component)')) 'Setup completion requires a fresh physical acknowledgement before normal activation review'
+Assert-Contract ($setup.Contains('setNeutralButton("Preview / finish setup")') -and $setup.Contains('confirmPreview(entry)') -and $setup -notmatch 'NativeSwitchSession\.|\.confirm\(|\.prepare\(|\.setEnabled\(') 'Setup preview cannot create a ticket, transaction or package mutation'
+Assert-Contract ($preview.Contains('repository.preview(entry)') -and $preview.Contains('No activation countdown or switch transaction is running') -and $preview -notmatch 'NativeSwitchSession\.|\.setPreferred\(|\.setEnabled\(|grantRuntimePermission') 'Onboarding preview uses ordinary launch without deadlines, HOME writes or automatic permissions'
+Assert-Contract ($setup.Contains('setupComplete.requestFocus()') -and $setup.Contains('setupComplete.nextFocusDownId = if (checked) review.id else preview.id') -and $setup.Contains('preview.nextFocusUpId = setupComplete.id')) 'Remote navigation reaches setup preview and acknowledged review'
 Write-Output "$passed recovery dialog source-contract tests passed"

@@ -41,6 +41,9 @@
 !/licenses/threetenbp_license.txt
 !/NOTICE
 !/PUBLIC-FILES.txt
+!/tests/RecoveryScriptTests.ps1
+!/tests/ShieldDevicePolicyTests.kt
+!/shared/src/ShieldDevicePolicy.kt
 !/CHANGELOG.md
 !/README.md
 !/RECOVERY-NATIVE-ADB.md
@@ -104,5 +107,6 @@ adbkey*
 *home-transactions*
 *adb-identity*
 local.properties
+
 
 

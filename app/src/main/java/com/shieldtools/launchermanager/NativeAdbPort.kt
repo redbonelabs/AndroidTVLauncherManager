@@ -12,7 +12,7 @@ internal class NativeAdbPort(private val context: Context, private val adb: AdbP
     private val localBoot = File("/proc/sys/kernel/random/boot_id").readText().trim()
     private var verified = false
     fun verifyPeer() {
-        check(Build.MANUFACTURER.equals("NVIDIA",true) && Build.DEVICE == "mdarcy" && Build.VERSION.SDK_INT == 30) { "This development backend supports only Shield Pro mdarcy / Android 11" }
+        ShieldDevicePolicy.requireSupported(Build.MANUFACTURER, Build.DEVICE, Build.VERSION.SDK_INT)
         check(adb.execute(LauncherAdbOperation.Manufacturer).trim().equals(Build.MANUFACTURER,true) &&
             adb.execute(LauncherAdbOperation.Device).trim() == Build.DEVICE &&
             adb.execute(LauncherAdbOperation.Api).trim() == Build.VERSION.SDK_INT.toString()) { "ADB peer is not this Shield" }
@@ -27,9 +27,9 @@ internal class NativeAdbPort(private val context: Context, private val adb: AdbP
         val snapshot = repository.read().snapshot
         check(snapshot.ownerUser && snapshot.homes.size <= 128)
         val output = adb.execute(LauncherAdbOperation.Home)
-        val home = snapshot.homes.singleOrNull { OnDeviceCommands.resolvedMatches(output,it.component) }?.component
-        check(home != null && snapshot.resolvedHome == home) { "Shell and app HOME resolution disagree or are ambiguous" }
-        return DeviceState(localBoot,0,home,snapshot.homes)
+        val resolution = HomeRules.requireAgreement(snapshot.resolvedHome, output, snapshot.homes)
+        // Agreed chooser/unset observations are safe to read, but never a switch baseline.
+        return DeviceState(localBoot,0,resolution.component,snapshot.homes)
     }
     override fun now() = SystemClock.elapsedRealtime()
     override fun recoveryReady() = inspect().homes.any { it.packageName == LauncherSafety.STOCK && Trust.eligible(it) }
@@ -63,4 +63,5 @@ internal class NativeAdbPort(private val context: Context, private val adb: AdbP
     override fun homeKey() { val expected = inspect().home; adb.execute(LauncherAdbOperation.HomeKey); awaitForeground(expected) }
     override fun showManager() { adb.execute(LauncherAdbOperation.Manager) }
 }
+
 

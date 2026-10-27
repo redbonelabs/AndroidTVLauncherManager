@@ -2,6 +2,7 @@ package com.shieldtools.launchermanager.backend
 
 import com.shieldtools.launchermanager.HomeEntry
 import com.shieldtools.launchermanager.LauncherSafety
+import com.shieldtools.launchermanager.HomeValidationException
 
 private const val OWNER = 10015
 private var passed = 0
@@ -27,7 +28,9 @@ private class Device : DevicePort {
     var boot = "boot-a"
     var user = 0
     var recovery = true
+    var unresolvedHome = false
     var crash: String? = null
+    var onboardingForeground: String? = null
     var ignorePreferred = false
     var cutAfterEnable = false
     var failHomeOnce = false
@@ -39,7 +42,7 @@ private class Device : DevicePort {
         val highest = enabled.maxOfOrNull { it.priority }
         val eligible = enabled.filter { it.priority == highest }
         val current = eligible.firstOrNull { it.component == preferredComponent } ?: eligible.firstOrNull()
-        return DeviceState(boot,user,current?.component,homes.toList())
+        return DeviceState(boot,user,if (unresolvedHome) null else current?.component,homes.toList())
     }
     override fun now() = time
     override fun recoveryReady() = recovery
@@ -49,7 +52,7 @@ private class Device : DevicePort {
         if (cutAfterEnable) { cutAfterEnable = false; throw PowerCut() }
     }
     override fun setPreferred(component: String) { events += "preferred:$component"; if (!ignorePreferred) preferredComponent=component; onPreferred?.invoke() }
-    override fun launch(component: String) { events += "launch:$component"; check(homes.single { it.component == component }.launchable); if (crash == component) error("Target crash"); focus=component }
+    override fun launch(component: String) { events += "launch:$component"; check(homes.single { it.component == component }.launchable); if (crash == component) error("Target crash"); focus=if (component==other.component) onboardingForeground ?: component else component }
     override fun foreground() = focus
     override fun homeKey() { events += "home"; focus = if (failHomeOnce) { failHomeOnce=false; null } else inspect().home }
     override fun showManager() { events += "manager"; focus="${Trust.MANAGER}/${Trust.MANAGER}.MainActivity" }
@@ -69,6 +72,40 @@ private fun ownedStock(setting: Int = 0): Rig = Rig().also { r ->
 }
 
 fun main() {
+    test("onboarding redirect cannot be committed as the target HOME") {
+        val r=Rig(); r.device.onboardingForeground="com.spocky.projengmenu/com.spocky.projengmenu.ui.onboarding.OnboardingActivity"
+        check(r.switch().phase==Phase.ROLLED_BACK)
+        check(r.device.inspect().home==r.device.detox.component)
+        check(r.device.events.none { it=="preferred:${r.device.other.component}" })
+        check(r.device.inspect().entry(r.device.stock.component)!!.appEnabledSetting==3 && r.engine.state().history.isEmpty())
+    }
+    test("setup and permission screens outside a transaction have no activation timer or journal mutations") {
+        val r=Rig(); val original=r.device.inspect(); val ledger=r.engine.state()
+        listOf("com.spocky.projengmenu/.ui.onboarding.OnboardingActivity", "com.google.android.permissioncontroller/com.android.permissioncontroller.permission.ui.GrantPermissionsActivity").forEach {
+            r.device.focus=it; r.device.time+=180000; r.engine.tick()
+            check(r.device.inspect()==original && r.engine.state()==ledger && r.memory.saves==0 && r.device.events.isEmpty())
+        }
+    }
+    test("setup-complete target still requires normal commit and exact previous-HOME restoration") {
+        val r=Rig(); r.commit()
+        check(r.device.inspect().home==r.device.other.component && r.engine.state().history.size==1)
+        val t=r.prepare(IntentKind.PREVIOUS); val tx=r.confirm(t)
+        check(tx.phase==Phase.AWAIT_KEEP)
+        check(r.engine.keep(OWNER,tx.id,r.engine.generation).phase==Phase.COMMITTED)
+        check(r.device.inspect().home==r.device.detox.component)
+        val stock=r.device.inspect().entry(r.device.stock.component)!!
+        check(stock.appEnabledSetting==3 && stock.componentEnabledSetting==0 && r.engine.state().history.size==2)
+    }
+    test("ambiguous HOME blocks a switch before journal writes or launcher operations") {
+        val r=Rig(); r.device.unresolvedHome=true
+        check(runCatching { r.prepare() }.exceptionOrNull() is HomeValidationException)
+        check(r.memory.saves==0 && r.device.events.isEmpty() && r.engine.state()==Ledger())
+    }
+    test("HOME becoming ambiguous after review blocks confirmation without touching prior history") {
+        val r=Rig(); val ticket=r.prepare(); val ledger=r.engine.state(); r.device.unresolvedHome=true
+        check(runCatching { r.confirm(ticket) }.exceptionOrNull() is HomeValidationException)
+        check(r.memory.saves==0 && r.device.events.isEmpty() && r.engine.state()==ledger)
+    }
     test("only exact owner UID, unique Manager package and pinned signer pass auth") {
         Trust.authorize(OWNER,OWNER,setOf(Trust.MANAGER),setOf(Trust.CERT))
         listOf(0,2000,10016,110015).forEach { denied { Trust.authorize(it,OWNER,setOf(Trust.MANAGER),setOf(Trust.CERT)) } }
